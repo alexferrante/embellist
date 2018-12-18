@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressSession({
   secret: 'secret'
 }));
-
+//
 app.use('/', index);
 
 // catch 404 and forward to error handler
