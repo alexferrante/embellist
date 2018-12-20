@@ -1,0 +1,52 @@
+<!-- served from routes in server.js -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>embellist</title>
+    <meta name="description" content="make ur playlists cool">
+    <!-- <link rel="icon" type="image/png" href="assets/placeholder.png"> -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Gothic+A1:500" rel="stylesheet">
+    <link href="https://sp-bootstrap.global.ssl.fastly.net/8.0.0/sp-bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.1/pixi.min.js"></script>
+  </head>
+  <body>
+    <div id="content">
+      <div id="loggedOut" hidden>
+   <!-- <img src="assets/placeholder.png" width="50px" id="logoLoggedOut"> -->
+        <h2>embellist</h2>
+        <p>make ur Spotify playlists look cool</p>
+        <button class="btn btn-primary" id="login">Log in</button>
+      </div>
+      
+      <div id="loggedIn" hidden>
+        <header>
+          <div id="userInfo">
+            <img id="avatar">
+            <h4 id="displayName"></h4>
+          </div>
+          <div>
+            <a href="/logout" class="btn btn-link pull-right" id="logout" style="color: #29977F;">Log out</a>
+          </div>
+        </header>
+        <h5 style="font-size: 5vw">Select a playlist</h5>
+        <div id="searchContent">
+     <!-- <img src="assets/placeholder.png" width="50px" id="logoLoggedIn"> -->
+          <div id="searchResults">
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- scripts -->
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"
+            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="/indexPage.js"></script>
+
+  </body>
+</html>
