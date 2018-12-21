@@ -53,7 +53,7 @@ if (access_token) {
   if (display_name) {
     $('#displayName').text(display_name);
   }
-
+  
   if (!display_name && !user_image) {
     $.get({url: '/me', headers: {"Authorization": `Bearer ${access_token}`}}, function(data) {
       if (data.images.length > 0) {
@@ -91,7 +91,7 @@ function showPlaylists() {
 
       container.on('click', function() {
         $('body').fadeOut(500, function() {
-         // window.location.href = `/visual/#playlist_id=${playlist.id}`;
+          window.location.href = `/visual/#playlist_id=${playlist.id}`;
         });
       });
 
@@ -108,14 +108,4 @@ function showPlaylists() {
   });
 }
 
-$(window).resize(function(){
-  /*
-  var w = window.innerWidth;
-    if (w < 500) {
-      $('#search').attr("placeholder", "Search");
-    }
-    if (w >= 500) {
-      $('#search').attr("placeholder", "Dancing Queen, God's Plan...");
-    }
-    */
-});
+

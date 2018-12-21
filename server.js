@@ -70,19 +70,46 @@ app.get('/me', function(request, response) {
     });
 });
 
+
 app.get('/playlists', function(request, response) {
   var loggedInSpotifyApi = new SpotifyWebApi();
   loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
 
+  loggedInSpotifyApi.getMe()
+    .then (data => {
+      loggedInSpotifyApi.getUserPlaylists(data.body.id, { limit: 90 })
+        .then(function(data) {
+          response.send(data.body);
+        }).catch(error => {
+          console.log('Error getting playlists', error);
+          response.status(error.statusCode).send(error);
+        });
+    })
+    .catch(error => {
+      response.status(error.statusCode).send(error);
+    });
+});
+
+/*
   loggedInSpotifyApi.getUserPlaylists()
     .then(function(data) {
       response.send(data.body);
     }, function(err) {
       console.log('Something went wrong!', err);
     });
+    */
+
+
+/*
+app.get('/playlistData', function(request, response) {
+  var loggeInSpotifyApi = new SpotifyWebApi();
+  loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
+  
+  loggedInSpotifyApi.get
+  
 });
 
-
+*/
 
 //-------------------------------------------------------------//
 
