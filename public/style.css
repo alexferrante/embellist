@@ -1,12 +1,13 @@
 * {
   box-sizing: border-box;
   font-family: 'Gothic A1', sans-serif;
+  font-weight: 500;
 }
 
 body {
   text-align: center;
   margin-top: 100px;
-  background: #313030;
+  background: #222222;
   color: #fff;
 }
 
@@ -76,16 +77,22 @@ main {
 }
 
 .container {
-  width: 200px;
+  width: 20vw;
   border-radius: 30px;
   cursor: pointer;
+  justify-self: center;
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #searchResults {
-  top: 300px;
+  padding-top: 20px; 
   display: grid;
-  grid-template-columns: repeat(4, auto);
-  grid-gap: 10px 10px;
-  position: absolute;
+  grid-template-columns: 20vw 20vw 20vw 20vw;
+  grid-template-rows: 20vw 20vw 20vw 20vw;
+  grid-gap: 20px;
   justify-content: center;
+  justify-items: center;
+  align-items: center;
 }

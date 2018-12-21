@@ -26,7 +26,6 @@ $(function() {
   track_id = Cookies.get('track_id');
   if (access_token && track_id) {
     // Logged in
-    //console.log("Logged in");
     $('#visuals-view').show();
   }
   else {
