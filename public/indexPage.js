@@ -1,6 +1,5 @@
 // client-side js
 var access_token;
-$('#searchResults').hide();
 
 $('#login').click(function() {
   $.get('/authorize', function(data) {
@@ -12,6 +11,7 @@ $('#logout').click(function() {
   Cookies.remove('access_token');
   Cookies.remove('display_name');
   Cookies.remove('user_image');
+  Cookies.remove('playlist_id');
   window.location.href = '/';
 });
 
@@ -76,10 +76,8 @@ else {
 }
 
 function showPlaylists() {
-  $('#searchResults').fadeOut(500);
-  $('#logoLoggedIn').fadeOut(200);
   $.get({url: '/playlists', headers: {"Authorization": `Bearer ${access_token}`}}, function(data) {
-    
+
     if (data.items.length == 0) {
       var noResults = $('<h3>No results found! Please try again.</h3>');
       noResults.appendTo('#searchResults');
@@ -91,12 +89,16 @@ function showPlaylists() {
 
       container.on('click', function() {
         $('body').fadeOut(500, function() {
-          window.location.href = `/visual/#playlist_id=${playlist.id}`;
+          window.location.href = `/visuals/#playlist_id=${playlist.id}`;
         });
       });
 
       var cover = $('<img>');
-      cover.attr("src", playlist.images[0].url);
+      if (playlist.images.length > 0) {
+        cover.attr("src", playlist.images[0].url);
+      } else {
+        cover.attr("src", 'assets/spotify_icon.png');
+      }
       cover.appendTo(container);
 
       var playlistName = $('<h5 style="font-weight: 300;">' + playlist.name + '</h5>');

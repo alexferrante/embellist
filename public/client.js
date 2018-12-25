@@ -4,7 +4,7 @@ function refreshPage() {
 }
 
 $(function() {
-  var access_token, track_id;
+  var access_token, playlist_id;
 
   const hash = window.location.hash
     .substring(1)
@@ -17,16 +17,16 @@ $(function() {
       return initial;
     }, {});
     window.location.hash = '';
-  if (hash.track_id) {
-    Cookies.set('track_id', hash.track_id);
+  if (hash.playlist_id) {
+    Cookies.set('playlist_id', hash.playlist_id);
     window.location.href = '/visuals';
   }
 
   access_token = Cookies.get('access_token');
-  track_id = Cookies.get('track_id');
-  if (access_token && track_id) {
+  playlist_id = Cookies.get('playlist_id');
+  if (access_token && playlist_id) {
     // Logged in
-    $('#visuals-view').show();
+    $('#view').show();
   }
   else {
     // Not logged in

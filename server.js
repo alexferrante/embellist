@@ -23,14 +23,13 @@ app.get("/visuals", function (request, response) {
 // init Spotify API wrapper
 var SpotifyWebApi = require('spotify-web-api-node');
 
-// Replace with your redirect URI, required scopes, and show_dialog preference
 var isProd = process.env.NODE_ENV == "production";
-var redirectUri = (isProd ? 'https://embellist.herokuapp.com' : 'http://localhost:3000') + "/callback";
-var scopes = ["streaming", "user-read-birthdate", "user-read-email", "user-read-private", "user-modify-playback-state", "user-read-playback-state",
-              "playlist-modify-public", "playlist-read-private", "playlist-modify-private"];
+var redirectUri = ('http://localhost:3000') + "/callback";
+var scopes = ["user-read-birthdate", "user-read-email", "user-read-private", "user-read-playback-state",
+              "playlist-modify-public", "playlist-read-private", "playlist-modify-private", ];
 var showDialog = true;
 
-// The API object we'll use to interact with the API
+// API object 
 var spotifyApi = new SpotifyWebApi({
   clientId : process.env.SPOTIFY_ID,
   clientSecret : process.env.SPOTIFY_SECRET,
@@ -54,14 +53,16 @@ app.get("/callback", function (request, response) {
   });
 });
 
+
 app.get("/logout", function (request, response) {
   response.redirect('/');
 });
 
+
 app.get('/me', function(request, response) {
   var loggedInSpotifyApi = new SpotifyWebApi();
   loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
-
+  
   loggedInSpotifyApi.getMe()
     .then(function(data) {
       response.send(data.body);
@@ -76,8 +77,8 @@ app.get('/playlists', function(request, response) {
   loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
 
   loggedInSpotifyApi.getMe()
-    .then (data => {
-      loggedInSpotifyApi.getUserPlaylists(data.body.id, { limit: 90 })
+    .then(data => {
+      loggedInSpotifyApi.getUserPlaylists(data.body.id, {limit : 50}) //maximum limit is 50
         .then(function(data) {
           response.send(data.body);
         }).catch(error => {
@@ -87,29 +88,25 @@ app.get('/playlists', function(request, response) {
     })
     .catch(error => {
       response.status(error.statusCode).send(error);
-    });
+    });  
 });
 
-/*
-  loggedInSpotifyApi.getUserPlaylists()
+
+app.get('/playlistTracks', function(request, response) {
+  var loggedInSpotifyApi = new SpotifyWebApi();
+  loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
+
+  let query = request.query.playlist_id; 
+
+  loggedInSpotifyApi.getPlaylistTracks(query, {limit: 9})
     .then(function(data) {
       response.send(data.body);
     }, function(err) {
-      console.log('Something went wrong!', err);
+      console.log('Something went wrong fetching playlist tracks', err);
     });
-    */
-
-
-/*
-app.get('/playlistData', function(request, response) {
-  var loggeInSpotifyApi = new SpotifyWebApi();
-  loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
-  
-  loggedInSpotifyApi.get
-  
 });
 
-*/
+app.get('/pla')
 
 //-------------------------------------------------------------//
 
