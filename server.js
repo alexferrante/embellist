@@ -1,5 +1,4 @@
 // server.js
-// where your node app starts
 
 // init project
 require('dotenv').config()
@@ -18,7 +17,6 @@ app.get("/visuals", function (request, response) {
   response.sendFile(__dirname + '/views/visuals.html');
 });
 
-//-------------------------------------------------------------//
 
 // init Spotify API wrapper
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -41,7 +39,7 @@ app.get("/authorize", function (request, response) {
   response.send(authorizeURL);
 });
 
-// Exchange Authorization Code for an Access Token
+// exchange authorization code for access token
 app.get("/callback", function (request, response) {
   var authorizationCode = request.query.code;
 
@@ -58,7 +56,7 @@ app.get("/logout", function (request, response) {
   response.redirect('/');
 });
 
-
+// get authenticated user
 app.get('/me', function(request, response) {
   var loggedInSpotifyApi = new SpotifyWebApi();
   loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
@@ -71,7 +69,7 @@ app.get('/me', function(request, response) {
     });
 });
 
-
+// get authenticated user's playlists
 app.get('/playlists', function(request, response) {
   var loggedInSpotifyApi = new SpotifyWebApi();
   loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
@@ -91,14 +89,14 @@ app.get('/playlists', function(request, response) {
     });  
 });
 
-
+// get selected playlist's tracks 
 app.get('/playlistTracks', function(request, response) {
   var loggedInSpotifyApi = new SpotifyWebApi();
   loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
 
   let query = request.query.playlist_id; 
 
-  loggedInSpotifyApi.getPlaylistTracks(query, {limit: 9})
+  loggedInSpotifyApi.getPlaylistTracks(query, {limit: 10})
     .then(function(data) {
       response.send(data.body);
     }, function(err) {
@@ -106,11 +104,39 @@ app.get('/playlistTracks', function(request, response) {
     });
 });
 
-app.get('/pla')
+// get selected playlist's track's audio features
+app.get('/trackData', function(request, response) {
+  var loggedInSpotifyApi = new SpotifyWebApi();
+  loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
 
-//-------------------------------------------------------------//
+  let req = request.query.track_ids; 
+  let tracks = JSON.parse(req);
+ 
+  loggedInSpotifyApi.getAudioFeaturesForTracks(tracks)
+    .then(function(data){
+      response.send(data.body);
+    }, function(err) {
+      console.log('Something went wrong fetching track features', err);
+    });
+});
 
-// listen for requests :)
+// upload generated image
+app.get('/upload', function(request, response) {
+  var loggedInSpotifyApi = new SpotifyWebApi();
+  loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
+
+  let id = request.query.playlist_id;
+  let image = request.query.image_uri; 
+
+  loggedInSpotifyApi.uploadCustomPlaylistCoverImage(id, image)
+    .then(function(data) {
+      response.send(data);
+    }, function(err) {
+      console.log('Something went wrong uploading image', err);
+    }); 
+});
+
+// listen for requests
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });

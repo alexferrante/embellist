@@ -1,4 +1,5 @@
 // client-side js
+
 var access_token;
 
 $('#login').click(function() {
@@ -12,6 +13,7 @@ $('#logout').click(function() {
   Cookies.remove('display_name');
   Cookies.remove('user_image');
   Cookies.remove('playlist_id');
+  Cookies.remove('tracks');
   window.location.href = '/';
 });
 
@@ -35,7 +37,7 @@ if (hash.access_token) {
 
 access_token = Cookies.get('access_token');
 
-// Logged in
+// logged in, set cookies according to user's info 
 if (access_token) {
   $('#loggedOut').hide();
   $('#loggedIn').fadeIn(500);
@@ -70,11 +72,12 @@ if (access_token) {
   showPlaylists();
 }
 else {
-  // Not logged in
+  // not logged in
   $('#loggedIn').hide();
   $('#loggedOut').fadeIn(500);
 }
 
+// display authenticated user's playlists
 function showPlaylists() {
   $.get({url: '/playlists', headers: {"Authorization": `Bearer ${access_token}`}}, function(data) {
 

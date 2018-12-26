@@ -1,8 +1,10 @@
 // client-side js
+
 function refreshPage() {
   window.location.reload();
 }
 
+// passsing data to separate view
 $(function() {
   var access_token, playlist_id;
 
@@ -17,6 +19,7 @@ $(function() {
       return initial;
     }, {});
     window.location.hash = '';
+
   if (hash.playlist_id) {
     Cookies.set('playlist_id', hash.playlist_id);
     window.location.href = '/visuals';
@@ -24,12 +27,13 @@ $(function() {
 
   access_token = Cookies.get('access_token');
   playlist_id = Cookies.get('playlist_id');
+
   if (access_token && playlist_id) {
-    // Logged in
+    // logged in
     $('#view').show();
   }
   else {
-    // Not logged in
+    // not logged in
     window.location.href = '/';
   }
 });
