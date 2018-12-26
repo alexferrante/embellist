@@ -28,6 +28,7 @@ $(function() {
   access_token = Cookies.get('access_token');
   playlist_id = Cookies.get('playlist_id');
 
+
   if (access_token && playlist_id) {
     // logged in
     $('#view').show();

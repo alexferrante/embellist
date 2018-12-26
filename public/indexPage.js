@@ -13,7 +13,7 @@ $('#logout').click(function() {
   Cookies.remove('display_name');
   Cookies.remove('user_image');
   Cookies.remove('playlist_id');
-  Cookies.remove('tracks');
+  Cookies.remove('track_ids');
   window.location.href = '/';
 });
 

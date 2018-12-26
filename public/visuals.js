@@ -24,6 +24,22 @@ if (playlist_id && accessToken) {
     // *unelegant* way of passing track ids for feature analysis 
     let track_ids = Cookies.get("track_ids");
     $.get({url: '/trackData', headers:{"Authorization": `Bearer ${accessToken}`}, data: {track_ids}}, function(data) {
-        console.log(data);
+        
+        var playlistEnergy = 0;
+        var playlistMode = 0;
+        var playlistTempo = 0;
+        var playlistValence = 0;
+
+        for (i = 0; i < data.audio_features.length; i++) {
+            playlistEnergy += data.audio_features[i].energy * (1/data.audio_features.length);
+            playlistMode += data.audio_features[i].mode * (1/data.audio_features.length);
+            playlistValence += data.audio_features[i].valence * (1/data.audio_features.length);
+            playlistTempo += data.audio_features[i].tempo * (1/data.audio_features.length);
+        }
+
+
+        // will probably need to move removal of cookies i.e. need playlist id for upload, but have to remove cookies in this script 
+        Cookies.remove("track_ids"); 
+        Cookies.remove("playlist_id");
     });
 }

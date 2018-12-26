@@ -96,7 +96,7 @@ app.get('/playlistTracks', function(request, response) {
 
   let query = request.query.playlist_id; 
 
-  loggedInSpotifyApi.getPlaylistTracks(query, {limit: 10})
+  loggedInSpotifyApi.getPlaylistTracks(query, {limit: 100})
     .then(function(data) {
       response.send(data.body);
     }, function(err) {
