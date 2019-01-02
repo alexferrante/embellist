@@ -79,9 +79,16 @@ main {
 .container {
   width: 20vw;
   border-radius: 30px;
-  cursor: pointer;
-  justify-self: center;
   white-space: pre;
+}
+
+.container img {
+  cursor: pointer;
+}
+
+.container h5 {
+  text-align: left;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -90,9 +97,8 @@ main {
   padding-top: 20px; 
   display: grid;
   grid-template-columns: 20vw 20vw 20vw 20vw;
-  grid-template-rows: 20vw 20vw 20vw 20vw;
-  grid-gap: 20px;
+  grid-template-rows: auto; 
+  grid-column-gap: 20px;
+  grid-row-gap: 5px;
   justify-content: center;
-  justify-items: center;
-  align-items: center;
 }

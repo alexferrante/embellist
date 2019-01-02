@@ -79,8 +79,8 @@ else {
 
 // display authenticated user's playlists
 function showPlaylists() {
+  $('#searchResults').hide();
   $.get({url: '/playlists', headers: {"Authorization": `Bearer ${access_token}`}}, function(data) {
-
     if (data.items.length == 0) {
       var noResults = $('<h3>No results found! Please try again.</h3>');
       noResults.appendTo('#searchResults');

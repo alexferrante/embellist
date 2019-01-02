@@ -36,7 +36,19 @@ if (playlist_id && accessToken) {
             playlistValence += data.audio_features[i].valence * (1/data.audio_features.length);
             playlistTempo += data.audio_features[i].tempo * (1/data.audio_features.length);
         }
+        
+        
+        //determine starting hues (determined by modality)
 
+        if (playlistMode < .5) {
+            const R = playlistMode * (255 - 0);
+            const G = 1 - playlistMode * (255 - 0);
+            const B = 1 - playlistMode * (255 - 0);
+        }
+
+        
+        playlistEnergy //determines saturation
+        playlistValence //determines lightness
 
         // will probably need to move removal of cookies i.e. need playlist id for upload, but have to remove cookies in this script 
         Cookies.remove("track_ids"); 

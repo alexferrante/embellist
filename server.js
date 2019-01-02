@@ -23,8 +23,8 @@ var SpotifyWebApi = require('spotify-web-api-node');
 
 var isProd = process.env.NODE_ENV == "production";
 var redirectUri = ('http://localhost:3000') + "/callback";
-var scopes = ["user-read-birthdate", "user-read-email", "user-read-private", "user-read-playback-state",
-              "playlist-modify-public", "playlist-read-private", "playlist-modify-private", ];
+var scopes = ["user-read-private", "playlist-modify-public", "playlist-read-private", 
+              "playlist-modify-private", "ugc-image-upload"];
 var showDialog = true;
 
 // API object 
