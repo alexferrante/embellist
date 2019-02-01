@@ -18,11 +18,16 @@
     right: 0;
     padding: 20px 40px 20px 40px;
   }
-  
-  main {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    overflow: hidden;
+
+  view {
+   
   }
+
+  upload {
+    
+    
+  }
+
+
+  
 
