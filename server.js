@@ -89,6 +89,20 @@ app.get('/playlists', function(request, response) {
     });  
 });
 
+app.get('/playlist', function(request, response) {
+  var loggedInSpotifyApi = new SpotifyWebApi();
+  loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
+
+  let playlist_id = request.query.playlist_id;
+
+  loggedInSpotifyApi.getPlaylist(playlist_id)
+    .then(function(data) {
+      response.send(data.body);
+    }, function(err) {
+      console.log('Something went wrong fetching playlist info', err); 
+    });
+});
+
 // get selected playlist's tracks 
 app.get('/playlistTracks', function(request, response) {
   var loggedInSpotifyApi = new SpotifyWebApi();
@@ -120,23 +134,7 @@ app.get('/trackData', function(request, response) {
     });
 });
 
-// upload generated image
-app.get('/upload', function(request, response) {
-  var loggedInSpotifyApi = new SpotifyWebApi();
-  loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
-
-  let id = request.query.playlist_id;
-  let image = request.query.image_uri; 
-
-  loggedInSpotifyApi.uploadCustomPlaylistCoverImage(id, image)
-    .then(function(data) {
-      response.send(data);
-    }, function(err) {
-      console.log('Something went wrong uploading image', err);
-    }); 
-});
-
 // listen for requests
 var listener = app.listen(process.env.PORT || 3000, function () {
-  console.log('Your app is listening on port ' + listener.address().port);
+  console.log('Listening on port ' + listener.address().port);
 });

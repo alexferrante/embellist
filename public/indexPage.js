@@ -12,6 +12,7 @@ $('#logout').click(function() {
   Cookies.remove('access_token');
   Cookies.remove('display_name');
   Cookies.remove('user_image');
+  Cookies.remove('user_id');
   Cookies.remove('playlist_id');
   Cookies.remove('track_ids');
   window.location.href = '/';
@@ -60,6 +61,7 @@ if (access_token) {
     $.get({url: '/me', headers: {"Authorization": `Bearer ${access_token}`}}, function(data) {
       if (data.images.length > 0) {
         Cookies.set("user_image", data.images[0].url);
+        Cookies.set("user_id", data.id);
         $('#user').attr("src", data.images[0].url);
         $('#user').attr("width", "40px");
         $('#user').css("border-radius", "50%");
@@ -85,17 +87,14 @@ function showPlaylists() {
       var noResults = $('<h3>No results found! Please try again.</h3>');
       noResults.appendTo('#searchResults');
     }
-   
     data.items.forEach(function(playlist) {
       var container = $('<div></div>');
       container.addClass('container');
-
       container.on('click', function() {
         $('body').fadeOut(500, function() {
           window.location.href = `/visuals/#playlist_id=${playlist.id}`;
         });
       });
-
       var cover = $('<img>');
       if (playlist.images.length > 0) {
         cover.attr("src", playlist.images[0].url);

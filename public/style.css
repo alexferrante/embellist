@@ -42,14 +42,12 @@ main {
   transform: translate(-50%, 0);
 }
 
-.btn-primary, .btn-primary:active, .btn-primary:link, .btn-primary:visited {
-  background-color: #29977F !important;
-  color: #FFC858 !important;
+.btn-primary, .btn-primary:active, .btn-primary:link {
+  background-color: #1DB954 !important;
 }
 
 .btn-primary:hover {
-  background-color: #53AA97 !important;
-  color: #FFC858 !important;
+  background-color: #18a54a !important;
 }
 
 #loggedOut {
@@ -84,6 +82,11 @@ main {
 
 .container img {
   cursor: pointer;
+  opacity: 1;
+}
+
+.container img:hover {
+  opacity: .5;
 }
 
 .container h5 {
