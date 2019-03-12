@@ -10,6 +10,25 @@
     color: #fff;
   }
 
+  #userInfo {
+    position: absolute;
+    height: 40px;
+    width: 66%;
+    margin: 15px 20px 20px 23px;
+  }
+
+  #user {
+    border-radius: 50%;
+    float: left;
+    margin-top: 5px;
+  }
+  
+  #displayName {
+    height: 100%;
+    position: absolute;
+    margin: 16px 0 0 50px;
+  }
+
   .sideCont {
     width: 30%;
     float: left;
@@ -19,13 +38,16 @@
 
   .sideCont img {
     padding-top: 5%;
-    
   }
 
   .mainCont {
     width: 70%;
     display: inline-block;
     background-color: #191414;
+  }
+
+  .mainCont h2{
+    padding-top: 10vw;
   }
 
   #upload {
