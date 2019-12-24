@@ -85,12 +85,11 @@ function getData() {
     $.get({url: '/trackData', headers:{"Authorization": `Bearer ${accessToken}`}, data: {track_ids}}, function(data) {
         for (i = 0; i < data.audio_features.length; i++) {
             try {
+                console.log(data.audio_features[i]);
                 playlistEnergy += data.audio_features[i].energy * (1/data.audio_features.length);
                 playlistMode += data.audio_features[i].mode * (1/data.audio_features.length);
                 playlistValence += data.audio_features[i].valence * (1/data.audio_features.length);
-            } catch (e) { 
-
-            } //pass over local files, which will have null feature values 
+            } catch (e) { } // ignore local files 
         }
         genImage();
         genDataVis();
@@ -122,15 +121,12 @@ function genDataVis() {
 function genImage() {
         //determine hue component of HSL coloring (range of cold v. warm colors)
         if (playlistMode < .5) {
-            var H = Math.floor(Math.random() * (283 - 63) + 63) //range of "cool" hue values
+            var H = Math.floor(Math.random() * (283 - 63) + 63)
         } else {
             var H = Math.floor(Math.random() * (422 - 284) + 284)
             if (H > 360) { H = H - 360}
-            //var H = //random number from 0 to 62 or 284 to 360 
         }
-        //determine saturation component of HSL coloring 
         var S = Math.floor(playlistEnergy * 100);
-        //determine lightness component of HSL coloring 
         var L = Math.floor(playlistValence * 100);
         var c = document.createElement('canvas');
         c.width = 300;
@@ -147,6 +143,5 @@ function genImage() {
         img.style = 'display: block';
         img.style = 'margin: 0 auto';
         $(".sideCont").append(img);
-
 }
 

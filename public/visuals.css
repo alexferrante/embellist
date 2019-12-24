@@ -31,8 +31,9 @@
 
   .sideCont {
     width: 30%;
+    height: 100%;
     float: left;
-    background-color: #2f2b2b;
+    background-color: #121212;
     padding: 2.5%;
   }
 
@@ -42,8 +43,9 @@
 
   .mainCont {
     width: 70%;
+    height: 100%;
     display: inline-block;
-    background-color: #191414;
+    background-color: #181818;
   }
 
   .mainCont h2{
