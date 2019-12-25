@@ -3,10 +3,12 @@
 // init project
 require('dotenv').config()
 var express = require('express');
+var cookieParser = require('cookie-parser');
 var app = express();
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
+app.use(cookieParser());
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (request, response) {
@@ -107,10 +109,17 @@ app.get('/playlist', function(request, response) {
 app.get('/playlistTracks', function(request, response) {
   var loggedInSpotifyApi = new SpotifyWebApi();
   loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
-
+  
   let query = request.query.playlist_id; 
+  let offCookie = request.cookies.offset;
+ 
+  let offset = 0;
 
-  loggedInSpotifyApi.getPlaylistTracks(query, {limit: 100, offset: 0})
+  if (offCookie != -1) {
+    offset = offCookie;
+  } 
+
+  loggedInSpotifyApi.getPlaylistTracks(query, {limit: 100, offset: offset})
     .then(function(data) {
       response.send(data.body);
     }, function(err) {

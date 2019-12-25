@@ -6,13 +6,13 @@ let accessToken = Cookies.get("access_token");
 var playlistEnergy = 0;
 var playlistValence = 0;
 var playlistMode = 0;
-
 var playlistPopularity = 0;
 
 if (playlist_id && accessToken) {
     var display_name = Cookies.get("display_name");
     var user_image = Cookies.get("user_image");
-    
+    Cookies.set('offset', -1);
+
     if (user_image) {
         $('#user').attr("src", user_image);
         $('#user').attr("width", "40px");
@@ -28,18 +28,30 @@ if (playlist_id && accessToken) {
         $.get({url: '/playlist', headers:{"Authorization": `Bearer ${accessToken}`}, data: {playlist_id}}, function(data) {
             var playlistName = $('<h2>' + data.name + '</h2>');
             playlistName.appendTo($('.mainCont')); 
-        }),
-        $.get({url: '/playlistTracks', headers:{"Authorization": `Bearer ${accessToken}`}, data: {playlist_id}}, function(data) {
-            if (data.items.length == 0) {
-                var noResults = $('<h3>No results found! Please try again.</h3>');
-                noResults.appendTo('body');
+            if (data.tracks.total > 100) {
+                Cookies.set('offset', 0)
             }
-            var tracks = [];
-            for (count = 0; count < data.items.length; count++) {
-                tracks.push(data.items[count].track.id);
-                playlistPopularity += data.items[count].track.popularity * (1/data.items.length);
+            var numRequests = Math.floor(data.tracks.total / 100) + 1;
+            for (i = 0; i <= numRequests; i++) { 
+                $.get({url: '/playlistTracks', headers:{"Authorization": `Bearer ${accessToken}`}, data: {playlist_id}}, function(data) {
+            
+                    if (data.items.length == 0) {
+                        var noResults = $('<h3>No results found! Please try again.</h3>');
+                        noResults.appendTo('body');
+                    }
+                    var tracks = [];
+                    for (count = 0; count < data.items.length; count++) {
+                        tracks.push(data.items[count].track.id);
+                        playlistPopularity += data.items[count].track.popularity * (1/data.items.length);
+                    }
+                    let currTracks = Cookies.get('track_ids').split(",");
+                    let newTracks = currTracks.concat(tracks);
+                    Cookies.set('track_ids', newTracks.join(','));
+                    console.log(newTracks);
+                })
+                Cookies.set('offset', parseInt(Cookies.get('offset')) + 99);
             }
-            Cookies.set("track_ids", tracks.join(","));
+            Cookies.set('offset', -1);
         })  
     )
     .done(function() {
@@ -84,16 +96,11 @@ function getData() {
     if (track_ids.length >= 100) {
         track_ids = track_ids.slice(0, 87);
     }
- 
-    if (p > 100) {
-        let nRequests = p / 100 + 1;
-        let idx = 0;
-        let 
-        for (i = idx; i <= 100; i++) {
 
-        }
-    } else {
-        $.get({url: '/trackData', headers:{"Authorization": `Bearer ${accessToken}`}, data: {track_ids}}, function(data) {
+    console.log(track_ids);
+ 
+  
+     $.get({url: '/trackData', headers:{"Authorization": `Bearer ${accessToken}`}, data: {track_ids}}, function(data) {
             console.log('p');
             for (i = 0; i < data.audio_features.length; i++) {
                 try {
@@ -105,7 +112,7 @@ function getData() {
             genImage();
             genDataVis();
         });
-    }
+    
 }
 
 function genDataVis() {
