@@ -39,7 +39,7 @@ if (playlist_id && accessToken) {
                 tracks.push(data.items[count].track.id);
                 playlistPopularity += data.items[count].track.popularity * (1/data.items.length);
             }
-            Cookies.set("track_ids", JSON.stringify(tracks));
+            Cookies.set("track_ids", tracks.join(","));
         })  
     )
     .done(function() {
@@ -69,9 +69,7 @@ $('#upload').click(function() {
         headers:{"Authorization": `Bearer ${accessToken}`,
                 'Content-Type': 'image/jpeg'},
         data: cover_image, 
-        success: function() {
-        console.log('uploaded pic');
-        }
+        success: function() {   }
     });
 });
 
@@ -81,40 +79,67 @@ $('#retry').click(function() {
 });
 
 function getData() {
-    let track_ids = Cookies.get("track_ids");
-    $.get({url: '/trackData', headers:{"Authorization": `Bearer ${accessToken}`}, data: {track_ids}}, function(data) {
-        for (i = 0; i < data.audio_features.length; i++) {
-            try {
-                console.log(data.audio_features[i]);
-                playlistEnergy += data.audio_features[i].energy * (1/data.audio_features.length);
-                playlistMode += data.audio_features[i].mode * (1/data.audio_features.length);
-                playlistValence += data.audio_features[i].valence * (1/data.audio_features.length);
-            } catch (e) { } // ignore local files 
+    let track_ids = Cookies.get("track_ids").split(",");
+    
+    if (track_ids.length >= 100) {
+        track_ids = track_ids.slice(0, 87);
+    }
+ 
+    if (p > 100) {
+        let nRequests = p / 100 + 1;
+        let idx = 0;
+        let 
+        for (i = idx; i <= 100; i++) {
+
         }
-        genImage();
-        genDataVis();
-    });
+    } else {
+        $.get({url: '/trackData', headers:{"Authorization": `Bearer ${accessToken}`}, data: {track_ids}}, function(data) {
+            console.log('p');
+            for (i = 0; i < data.audio_features.length; i++) {
+                try {
+                    playlistEnergy += data.audio_features[i].energy * (1/data.audio_features.length);
+                    playlistMode += data.audio_features[i].mode * (1/data.audio_features.length);
+                    playlistValence += data.audio_features[i].valence * (1/data.audio_features.length);
+                } catch (e) { } // ignore local files 
+            }
+            genImage();
+            genDataVis();
+        });
+    }
 }
 
 function genDataVis() {
     var popCtx = $("<canvas id='popChart'><canvas");
     $('.mainCont').append(popCtx)
-    var popChart = new Chart($("#popChart"), {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [playlistPopularity, 100 - playlistPopularity],
-                labels: [
-                    'Popularity',
-                ],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)'
-                ]
-            }]
-        }
-    });
-    var enCtx = $("<canvas id='energyChart'><canvas");
-    $('.mainCont').append(enCtx)
+    var dvStr = "";
+    if (playlistPopularity <= 40) {
+        dvStr = "not widely popular";
+    } else if (playlistPopularity <= 65 && playlistPopularity > 40) {
+        dvStr = "relatively popular";
+    } else {
+        dvstr = "averagely popular";
+    }
+    var dv = $(`<div>Your music taste is ${dvStr} on Spotify!</div>`);
+    var desc = $(`<div>On a scale of 0-100 your playlist scored ${Math.round(playlistPopularity)} in terms of song popularity</div>`)
+    // var popChart = new Chart($("#popChart"), {
+    //     type: 'doughnut',
+    //     data: {
+    //         datasets: [{
+    //             data: [playlistPopularity, 100 - playlistPopularity],
+    //             labels: [
+    //                 'Popularity',
+    //             ],
+    //             backgroundColor: [
+    //                 'rgba(255,0,0,0.3)'
+    //             ]
+    //         }]
+    //     }
+    // });
+    // var enCtx = $("<canvas id='energyChart'><canvas");
+    // $('.mainCont').append(enCtx)
+    
+    $('.mainCont').append(dv);
+    $('.mainCont').append(desc);
    
 }
 

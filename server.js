@@ -110,7 +110,7 @@ app.get('/playlistTracks', function(request, response) {
 
   let query = request.query.playlist_id; 
 
-  loggedInSpotifyApi.getPlaylistTracks(query, {limit: 100})
+  loggedInSpotifyApi.getPlaylistTracks(query, {limit: 100, offset: 0})
     .then(function(data) {
       response.send(data.body);
     }, function(err) {
@@ -122,10 +122,7 @@ app.get('/playlistTracks', function(request, response) {
 app.get('/trackData', function(request, response) {
   var loggedInSpotifyApi = new SpotifyWebApi();
   loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
-
-  let req = request.query.track_ids; 
-  let tracks = JSON.parse(req);
- 
+  let tracks = request.query.track_ids; 
   loggedInSpotifyApi.getAudioFeaturesForTracks(tracks)
     .then(function(data){
       response.send(data.body);
