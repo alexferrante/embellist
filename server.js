@@ -132,6 +132,7 @@ app.get('/trackData', function(request, response) {
   var loggedInSpotifyApi = new SpotifyWebApi();
   loggedInSpotifyApi.setAccessToken(request.headers['authorization'].split(' ')[1]);
   let tracks = request.query.track_ids; 
+  console.log(request.query);
   loggedInSpotifyApi.getAudioFeaturesForTracks(tracks)
     .then(function(data){
       response.send(data.body);

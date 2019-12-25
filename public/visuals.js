@@ -32,7 +32,9 @@ if (playlist_id && accessToken) {
                 Cookies.set('offset', 0)
             }
             var numRequests = Math.floor(data.tracks.total / 100) + 1;
-            for (i = 0; i <= numRequests; i++) { 
+            var i = 0;
+            var track_ids = [];
+            while (i != numRequests) {
                 $.get({url: '/playlistTracks', headers:{"Authorization": `Bearer ${accessToken}`}, data: {playlist_id}}, function(data) {
             
                     if (data.items.length == 0) {
@@ -44,20 +46,16 @@ if (playlist_id && accessToken) {
                         tracks.push(data.items[count].track.id);
                         playlistPopularity += data.items[count].track.popularity * (1/data.items.length);
                     }
-                    let currTracks = Cookies.get('track_ids').split(",");
-                    let newTracks = currTracks.concat(tracks);
-                    Cookies.set('track_ids', newTracks.join(','));
-                    console.log(newTracks);
-                })
-                Cookies.set('offset', parseInt(Cookies.get('offset')) + 99);
+                    track_ids.push(...tracks);
+                    console.log(track_ids);
+                }).then(Cookies.set('offset', parseInt(Cookies.get('offset')) + 100)).then(i++)
             }
-            Cookies.set('offset', -1);
-        })  
-    )
-    .done(function() {
-        getData();
-    })
-    .fail(function() {
+            if (i == numRequests) {
+                Cookies.set('offset', -1);
+                getData(track_ids);
+            }
+        })
+    ).fail(function() {
         console.log(err);
     })
 }
@@ -68,7 +66,6 @@ $('#logout').click(function() {
     Cookies.remove('user_image');
     Cookies.remove('user_id');
     Cookies.remove('playlist_id');
-    Cookies.remove('track_ids');
     window.location.href = '/';
 });
 
@@ -90,18 +87,10 @@ $('#retry').click(function() {
     genImage();
 });
 
-function getData() {
-    let track_ids = Cookies.get("track_ids").split(",");
-    
-    if (track_ids.length >= 100) {
-        track_ids = track_ids.slice(0, 87);
-    }
-
+function getData(track_ids) {
+    console.log('called get track data...');
     console.log(track_ids);
- 
-  
      $.get({url: '/trackData', headers:{"Authorization": `Bearer ${accessToken}`}, data: {track_ids}}, function(data) {
-            console.log('p');
             for (i = 0; i < data.audio_features.length; i++) {
                 try {
                     playlistEnergy += data.audio_features[i].energy * (1/data.audio_features.length);
