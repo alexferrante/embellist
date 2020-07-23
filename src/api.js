@@ -1,3 +1,5 @@
+import { get } from "http"
+
 const clientId = 'bd77a207f7394713a5da754a008c32d5'
 
 export const loginUrl = (
@@ -32,6 +34,15 @@ const mapAlbum = ({ id, name, artists, images, release_date, total_tracks, exter
   previewUrl: external_urls.spotify
 })
 
+const mapPlaylist = ({ name, id, description, images, tracks, external_urls }) => ({
+  name,
+  id,
+  description,
+  image: images[1] ? images[1].url : placeholderUrl,
+  tracks, 
+  url: external_urls.spotify
+})
+
 const fetchApi = path =>
   fetch(`https://api.spotify.com/v1${path}`, {
     headers: {
@@ -43,12 +54,21 @@ const fetchApi = path =>
     }
   })
 
+
+export const getUserId = fetchApi(`/me`).then(({ id }) => id)
+
 export const searchArtists = query =>
   fetchApi(`/search?q=${query}&type=artist`)
     .then(({ artists }) => artists.items.map(mapArtist))
 
-export const searchUsersPlaylists
-  fetchApi(`/me/playlists`).then(({ playlists }) => console.log(playlists))
+export const getUsersPlaylists = 
+  getUserId.then(user_id => fetchApi(`/users/${user_id}/playlists`)
+    .then(playlists => playlists.items.map(mapPlaylist)))
+
+
+export const getPlaylist = playlist_id =>
+  fetchApi(`/playlists/${playlist_id}`)
+    .then(({ playlist }) => playlist.items.map(mapPlaylist))
 
 export const fetchArtist = id => fetchApi(`/artists/${id}`).then(mapArtist)
 

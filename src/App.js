@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { Home, Search, Albums } from './pages'
+import { Home, Search, Playlists } from './pages'
 import { ProtectedRoute } from './components'
 
 const App = () => {
   const [query, setQuery] = useState('')
-  const [artists, setArtists] = useState([])
+  const [playlists, setPlaylists] = useState([])
 
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <header>
-        <h1 className='title'>Spotify Artist Search</h1>
+        <h1 className='title'></h1>
       </header>
       <main>
         <Switch>
@@ -20,13 +20,13 @@ const App = () => {
             <Search
               query={query}
               setQuery={setQuery}
-              artists={artists}
-              setArtists={setArtists}
+              playlists={playlists}
+              setPlaylists={setPlaylists}
             />
           </ProtectedRoute>
 
           <ProtectedRoute path='/artists/:artistId'>
-            <Albums artists={artists} setArtists={setArtists} />
+            <Playlists playlists={playlists} setPlaylists={setPlaylists} />
           </ProtectedRoute>
         </Switch>
       </main>

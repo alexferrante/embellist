@@ -1,4 +1,4 @@
-export { default as Album } from './Album'
+export { default as Album } from './Playlist'
 
 export { default as Artist } from './Artist'
 

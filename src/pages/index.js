@@ -1,4 +1,4 @@
-export { default as Albums } from './Albums'
+export { default as Playlists } from './Playlists'
 
 export { default as Home } from './Home'
 
